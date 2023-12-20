@@ -1,0 +1,23 @@
+server:
+    port: 8080
+
+axon:
+  serializer.general: jackson
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost/multi-module
+    username: postgres
+    password: postgres
+    driverClassName: org.postgresql.Driver
+  hikari:
+    connectionTimeout: 20000
+    maximumPoolSize: 5
+  jpa:
+    database-platform: org.example.config.NoToastPostgresSQLDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: false

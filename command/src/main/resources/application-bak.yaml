@@ -1,0 +1,47 @@
+server:
+    port: 8080
+
+axon:
+  serializer.general: jackson
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost/multi-module
+    username: postgres
+    password: postgres
+    driverClassName: org.postgresql.Driver
+  hikari:
+    connectionTimeout: 20000
+    maximumPoolSize: 5
+  jpa:
+    database-platform: org.example.config.NoToastPostgresSQLDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: false
+
+#  rabbitmq:
+#    host: "${RABBITMQ_HOST:localhost}"
+#    port: "${RABBITMQ_PORT:5672}"
+#    virtual-host: /
+#    username: "${RABBITMQ_USER:guest}"
+#    password: "${RABBITMQ_PASSWORD:guest}"
+#    listener:
+#      simple:
+#        default-requeue-rejected: false
+#        retry:
+#          enabled: true
+#          initial-interval: 1s
+#          max-attempts: 3
+#          max-interval: 5s
+#          multiplayer: 2
+#        prefetch: ${RABBITMQ_CONCURRENCY:1}
+#
+
+#    eventhandling:
+#      processors:
+#        tracking-processor:
+#          mode: subscribe
+#          source: myEventProcessor

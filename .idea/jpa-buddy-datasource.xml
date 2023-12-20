@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="JpbDataSourceConfig">
+    <data-sources>
+      <data-source id="f10ae2a7-dda3-404d-9725-295697a6ac7f" name="multi-module" url="jdbc:postgresql://localhost/multi-module" driverClass="org.postgresql.Driver" />
+    </data-sources>
+  </component>
+</project>
