@@ -1,8 +1,8 @@
-<h1>oid untuk axon di rubah jadi bytea supaya readable dan kalau pindah database bisa kebawa</h1>
+## oid untuk axon di rubah jadi bytea supaya readable dan kalau pindah database bisa kebawa
 
-<h3>A. Skenario kalau mulai dari existing</h3>
 1. matikan applikasi/services
-2. eksekusi script berikut : 
+2. eksekusi script berikut :
+
 ```sql
 -- token_entry
 ALTER TABLE token_entry ADD COLUMN token_bytea BYTEA;
@@ -59,11 +59,54 @@ UPDATE dead_letter_entry SET diagnostics_bytea = lo_get(diagnostics);
 ALTER TABLE dead_letter_entry  DROP COLUMN diagnostics;
 ALTER TABLE dead_letter_entry RENAME COLUMN diagnostics_bytea to diagnostics;
 ```
-3. di application.yaml
+3. Buat Class NoToastPostgresSQLDialect
+```java
+
+import org.hibernate.boot.model.TypeContributions;
+import org.hibernate.dialect.DatabaseVersion;
+import org.hibernate.dialect.PostgreSQLDialect;
+import org.hibernate.service.ServiceRegistry;
+import org.hibernate.type.SqlTypes;
+import org.hibernate.type.descriptor.jdbc.BinaryJdbcType;
+import org.hibernate.type.descriptor.jdbc.spi.JdbcTypeRegistry;
+
+import java.sql.Types;
+
+public class NoToastPostgresSQLDialect extends PostgreSQLDialect {
+  public NoToastPostgresSQLDialect(){
+    super(DatabaseVersion.make(9, 5));
+  }
+
+  @Override
+  protected String columnType(int sqlTypeCode) {
+    if (sqlTypeCode == SqlTypes.BLOB){
+      return "jsonb";
+    }
+    return super.columnType(sqlTypeCode);
+  }
+
+  @Override
+  protected String castType(int sqlTypeCode) {
+    if (sqlTypeCode == SqlTypes.BLOB){
+      return "jsonb";
+    }
+    return super.castType(sqlTypeCode);
+  }
+
+  @Override
+  public void contributeTypes(TypeContributions typeContributions, ServiceRegistry serviceRegistry) {
+    super.contributeTypes(typeContributions, serviceRegistry);
+    JdbcTypeRegistry jdbcTypeRegistry = typeContributions.getTypeConfiguration().getJdbcTypeRegistry();
+    jdbcTypeRegistry.addDescriptor(Types.BLOB, BinaryJdbcType.INSTANCE);
+  }
+}
+```
+4. Di application.yaml
+
 ```yaml
 spring.jpa.database-platform: org.example.config.NoToastPostgresSQLDialect
 ```
-4. buat scrip orm.xml di scr/main/resources/META-INF
+5. buat scrip orm.xml di scr/main/resources/META-INF
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <entity-mappings xmlns="http://java.sun.com/xml/ns/persistence/orm" version="2.0">
@@ -113,5 +156,4 @@ spring.jpa.database-platform: org.example.config.NoToastPostgresSQLDialect
   </entity>
 </entity-mappings>
 ```
-<h3>B. Skenario kalau mulai dari awal</h3>
-- langsung jalanin aja projectnya
+6. run projectnya
