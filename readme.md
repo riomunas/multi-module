@@ -1,3 +1,5 @@
+[Here is the Refence of This Project ](https://www.youtube.com/watch?v=VUxJrb4ghlo&list=PL4O1nDpoa5KQ7eAF4uJa5Tj51YXoBq1Zh)
+
 <h3>Notes</h3>
 aggregate = transaction boundary for certain subject  
 commandHandler is should be idempotent (operasi atau fungsi dapat diaplikasikan beberapa kali tanpa menghasilkan efek yang berbeda)
