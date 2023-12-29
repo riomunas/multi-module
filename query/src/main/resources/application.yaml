@@ -1,0 +1,29 @@
+server:
+    port: 8081
+
+axon:
+  serializer.general: jackson
+  eventhandling:
+    processors:
+      queryEventHandler:
+        mode: subscribing
+        source: myQueueMessageSource
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost/multi_module_readdb
+    username: postgres
+    password: postgres
+    driverClassName: org.postgresql.Driver
+    initialization-mode: always
+  hikari:
+    connectionTimeout: 20000
+    maximumPoolSize: 5
+  jpa:
+    database-platform: org.example.config.NoToastPostgresSQLDialect
+    hibernate:
+      ddl-auto: create
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: false

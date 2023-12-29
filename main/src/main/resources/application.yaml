@@ -1,14 +1,12 @@
 server:
-    port: 8080
+    port: 3000
 
 axon:
   serializer.general: jackson
-  amqp:
-    exchange: myExchange
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost/multi_module_writedb
+    url: jdbc:postgresql://localhost/multi_module
     username: postgres
     password: postgres
     driverClassName: org.postgresql.Driver

@@ -1,27 +1,34 @@
 package org.example.projection;
 
+import lombok.RequiredArgsConstructor;
 import org.axonframework.config.ProcessingGroup;
 import org.axonframework.eventhandling.EventHandler;
 import org.axonframework.queryhandling.QueryHandler;
 import org.springframework.stereotype.Component;
+
 import static org.example.api.Events.*;
 import static org.example.api.Queries.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
-@ProcessingGroup("eventProcessor")
+@ProcessingGroup("queryEventHandler")
+@RequiredArgsConstructor
 @Component
 public class ConferenceListProjection {
-  private List<String> conferences = new ArrayList<>();
+  private final ConferenceModelRepository repository;
 
   @EventHandler
   public void on(ConferenceAddedEvent event) {
-    conferences.add(event.name());
+    repository.save(ConferenceModel.builder()
+        .conferenceId(event.conferenceId())
+        .website(event.website())
+        .name(event.name())
+
+      .build());
   }
 
   @QueryHandler
   public List<String> on(AllConferenceQuery query) {
-    return conferences;
+    return repository.findAll().stream().map(ConferenceModel::getName).toList();
   }
 }

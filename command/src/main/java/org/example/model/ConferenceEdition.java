@@ -1,19 +1,19 @@
 package org.example.model;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.axonframework.commandhandling.CommandHandler;
 import org.axonframework.eventsourcing.EventSourcingHandler;
 import org.axonframework.modelling.command.EntityId;
-import org.example.api.Commands;
 
 import java.time.LocalDate;
 
+import static org.example.Helper.getAggregatePhaseIcon;
 import static org.example.api.Events.*;
 import static org.example.api.Commands.*;
 import static org.axonframework.modelling.command.AggregateLifecycle.apply;
 
+@Slf4j
 @Builder
 public class ConferenceEdition {
   @EntityId
@@ -22,6 +22,8 @@ public class ConferenceEdition {
 
   @CommandHandler
   public String handle(ScheduleConferenceEditionCommand command) {
+    log.info("⬇️ AddConferenceCommand Recieved : {}", command);
+
     //validate
     if(command.startDate().equals(startDate)) return command.editionId();
 
@@ -37,6 +39,8 @@ public class ConferenceEdition {
 
   @EventSourcingHandler
   public void handle(ConferenceScheduleEditionEvent event) {
+    log.info("{} Processing ConferenceScheduleEditionEvent", getAggregatePhaseIcon());
+
     this.startDate = event.startDate();
   }
 }
