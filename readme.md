@@ -22,12 +22,10 @@ project ini di rancang untuk bisa scaleable / suport microservices.
 4. main : untuk menjalanakan project sebagai aplikasi monolith
 
 ### Todo list:
-- locking db/ distributed locking
-- reque message yang gagal karena duplikat/tertentu
+- requeue message yang gagal karena duplikat/tertentu
 - snapshot agregate
 - reset agregate
 - recreate projection
-- testable
 
 ### Note:
 - axon bisa menggunakan database sebagai eventbus nya. sehingga walaupun applikasi jalan sendiri2 event yang di apply
